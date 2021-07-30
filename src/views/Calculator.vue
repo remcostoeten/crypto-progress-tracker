@@ -4,7 +4,7 @@
       <div class="calculator">
         <div class="calculator__start-amount">
           <label>Start Bedrag</label>
-          <input type="number" v-model="startAmount"/>
+          <CurrencyInput v-model="startAmount" :currency="currency"></CurrencyInput>
         </div>
       </div>
       <div class="calculator__percentage">
@@ -44,6 +44,54 @@
   </div>
 </template>
 
+<script>
+import CurrencyInput from '@/components/CurrencyInput.vue';
+
+let periodTotal = 0;
+
+export default {
+  components: {
+    CurrencyInput,
+  },
+
+  data() {
+    return {
+      rows: 365,
+      startAmount: 670,
+      percentagePerPeriod: 1,
+      currency: 'EUR',
+    }
+  },
+
+  watch: {
+    startAmount() {
+      this.resetValues();
+    },
+    percentagePerPeriod() {
+      this.resetValues();
+    }
+  },
+  beforeMount() {
+    this.resetValues();
+  },
+  methods: {
+    getReturnPerPeriod() {
+      let value = periodTotal * (this.percentagePerPeriod / 100);
+
+      periodTotal += value;
+
+      return value.toFixed(4);
+    },
+    getPeriodTotal() {
+      return periodTotal.toFixed(4);
+    },
+    resetValues() {
+      periodTotal = this.startAmount;
+    }
+  }
+}
+</script>
+
 <style lang="scss">
 .calculator {
   &__intro {
@@ -80,43 +128,3 @@ table {
   }
 }
 </style>
-
-<script>
-let periodTotal = 0;
-
-export default {
-  data() {
-    return {
-      rows: 365,
-      startAmount: 670,
-      percentagePerPeriod: 1
-    }
-  },
-  watch: {
-    startAmount() {
-      this.resetValues();
-    },
-    percentagePerPeriod() {
-      this.resetValues();
-    }
-  },
-  beforeMount() {
-    this.resetValues();
-  },
-  methods: {
-    getReturnPerPeriod() {
-      let value = periodTotal * (this.percentagePerPeriod / 100);
-
-      periodTotal += value;
-
-      return value.toFixed(4);
-    },
-    getPeriodTotal() {
-      return periodTotal.toFixed(4);
-    },
-    resetValues() {
-      periodTotal = this.startAmount;
-    }
-  }
-}
-</script>
