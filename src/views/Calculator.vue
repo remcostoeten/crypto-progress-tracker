@@ -1,11 +1,13 @@
 <template>
   <div class="calculator">
-    <div class="inputs">
-      <div class="input">
-        <label>Start Bedrag</label>
-        <input type="number" v-model="startAmount"/>
+    <div class="calculator__intro">
+      <div class="calculator">
+        <div class="calculator__start-amount">
+          <label>Start Bedrag</label>
+          <input type="number" v-model="startAmount"/>
+        </div>
       </div>
-      <div class="input">
+      <div class="calculator__percentage">
         <label>Procenten per dag</label>
         <select v-model="percentagePerPeriod">
           <option value="0.5">0,50%</option>
@@ -17,50 +19,55 @@
     </div>
     <table>
       <thead>
-        <tr>
-          <th>Dag</th>
-          <th>Minimale Winst per dag</th>
-          <th>Verwachte eindstand account per dag</th>
-          <th>Werkelijke eindstand per dag</th>
-          <th>Winst of verlies per dag</th>
-          <th>Hoeveel % loop je voor of achter</th>
-          <th>NOTITIES OF VERWIJZINGEN NAAR JE ORDER DAG  BOEK</th>
-        </tr>
+      <tr>
+        <th>Dag</th>
+        <th>Minimale Winst per dag</th>
+        <th>Verwachte eindstand account per dag</th>
+        <th>Werkelijke eindstand per dag</th>
+        <th>Winst of verlies per dag</th>
+        <th>Hoeveel % loop je voor of achter</th>
+        <th>NOTITIES OF VERWIJZINGEN NAAR JE ORDER DAG BOEK</th>
+      </tr>
       </thead>
-      <tbody>
-        <tr v-for="row in rows">
-          <td>{{ row }}</td>
-          <td>{{ getReturnPerPeriod(row) }}</td>
-          <td>{{ getPeriodTotal(row) }}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+      <tbody class="wrapper">
+      <tr v-for="row in rows">
+        <td>{{ row }}</td>
+        <td>{{ getReturnPerPeriod(row) }}</td>
+        <td>{{ getPeriodTotal(row) }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <style lang="scss">
-.inputs {
-  text-align: left;
-  margin-bottom: 20px;
-
-  .input {
-    margin-bottom: 10px;
+.calculator {
+  &__intro {
+    text-align: left;
+    margin-bottom: 20px;
   }
 
-  input,
-  select {
-    padding: 5px;
+  &__start-amount {
+    margin-bottom: 10px;
+
+
   }
 
   label {
     display: inline-block;
     width: 200px;
   }
+
+  input,
+  select {
+    padding: 5px;
+  }
 }
+
 table {
   th {
     padding: 5px;
@@ -78,7 +85,7 @@ table {
 let periodTotal = 0;
 
 export default {
-  data () {
+  data() {
     return {
       rows: 365,
       startAmount: 670,
@@ -86,28 +93,28 @@ export default {
     }
   },
   watch: {
-    startAmount () {
+    startAmount() {
       this.resetValues();
     },
-    percentagePerPeriod () {
+    percentagePerPeriod() {
       this.resetValues();
     }
   },
-  beforeMount () {
+  beforeMount() {
     this.resetValues();
   },
   methods: {
-    getReturnPerPeriod () {
+    getReturnPerPeriod() {
       let value = periodTotal * (this.percentagePerPeriod / 100);
 
       periodTotal += value;
 
       return value.toFixed(4);
     },
-    getPeriodTotal () {
+    getPeriodTotal() {
       return periodTotal.toFixed(4);
     },
-    resetValues () {
+    resetValues() {
       periodTotal = this.startAmount;
     }
   }
