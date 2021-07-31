@@ -1,91 +1,96 @@
 <template>
-  <div>
-    <OptionSection
-        v-model="exportValueAsInteger"
-        label="Export Value As Integer"
-        description="Whether the number value should be exported as integer instead of a float value depending on the configured precision."
-    />
-    test
+  <div class="calculator">
+    <div class="calculator__intro">
+      <div class="calculator">
+        <div class="calculator__start-amount">
+          <label>Start Bedrag</label>
+          <CurrencyInput v-model="startAmount" :currency="currency"></CurrencyInput>
+        </div>
+      </div>
+      <div class="calculator__percentage">
+        <label>Procenten per dag</label>
+        <select v-model="percentagePerPeriod">
+          <option value="0.5">0,50%</option>
+          <option value="1">1,00%</option>
+          <option value="1.5">1,50%</option>
+          <option value="2">2.00%</option>
+        </select>
+      </div>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Dag</th>
+        <th>Minimale Winst per dag</th>
+        <th>Verwachte eindstand account per dag</th>
+        <th>Werkelijke eindstand per dag</th>
+        <th>Winst of verlies per dag</th>
+        <th>Hoeveel % loop je voor of achter</th>
+        <th>NOTITIES OF VERWIJZINGEN NAAR JE ORDER DAG BOEK</th>
+      </tr>
+      </thead>
+      <tbody class="wrapper">
+      <tr v-for="row in rows">
+        <td>{{ row }}</td>
+        <td>{{ getReturnPerPeriod(row) }}</td>
+        <td>{{ getPeriodTotal(row) }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
-  <H2>TEST</H2>
 </template>
 
 <script>
-import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
-import CurrencyInput from '@/components/CurrencyInput.vue'
-import Dialog from '@/components/Dialog.vue'
-import stringifyObject from 'stringify-object'
-import OptionSection from '@/components/OptionSection.vue';
-import Checkbox from '@/components/Checkbox.vue';
-import Slider from '@/components/Slider.vue';
+import CurrencyInput from '@/components/CurrencyInput.vue';
 
-export default defineComponent({
-  name: 'Demo',
-  components: { Slider, Checkbox, OptionSection, Dialog, CurrencyInput },
-  setup() {
-    const state: any = reactive({
-      exportDialogVisible: false,
-      value: 1234.5,
-      localeEnabled: false,
-      locale: 'de-DE',
-      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'pt-BR', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR'],
+let periodTotal = 0;
+
+export default {
+  components: {
+    CurrencyInput,
+  },
+
+  data() {
+    return {
+      rows: 365,
+      startAmount: 670,
+      percentagePerPeriod: 1,
       currency: 'EUR',
-      currencyDisplay: 'symbol',
-      currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR'],
-      currencyDisplays: [
-        { value: 'symbol', label: 'Symbol' },
-        { value: 'narrowSymbol', label: 'Narrow symbol' },
-        { value: 'code', label: 'Code' },
-        { value: 'name', label: 'Name' },
-        { value: 'hidden', label: 'Hidden' }
-      ],
-      hideCurrencySymbolOnFocus: true,
-      hideGroupingSeparatorOnFocus: true,
-      hideNegligibleDecimalDigitsOnFocusEnabled: true,
-      hideNegligibleDecimalDigitsOnFocus: true,
-      precisionEnabled: false,
-      precision: 2,
-      valueRangeEnabled: false,
-      minValue: undefined,
-      maxValue: undefined,
-      autoDecimalDigitsEnabled: true,
-      autoDecimalDigits: false,
-      exportValueAsInteger: false,
-      autoSign: true,
-      useGrouping: true,
-      options: computed(() => {
-        return {
-          locale: state.localeEnabled ? state.locale : undefined,
-          currency: state.currency,
-          currencyDisplay: state.currencyDisplay,
-          valueRange: state.valueRangeEnabled ? { min: state.minValue, max: state.maxValue } : undefined,
-          precision: state.precisionEnabled ? state.precision : undefined,
-          hideCurrencySymbolOnFocus: state.hideCurrencySymbolOnFocus,
-          hideGroupingSeparatorOnFocus: state.hideGroupingSeparatorOnFocus,
-          hideNegligibleDecimalDigitsOnFocus: state.hideNegligibleDecimalDigitsOnFocus,
-          autoDecimalDigits: state.autoDecimalDigits,
-          exportValueAsInteger: state.exportValueAsInteger,
-          autoSign: state.autoSign,
-          useGrouping: state.useGrouping
-        }
-      }),
-      stringifiedOptions: computed(() => stringifyObject(state.options))
-    })
+    }
+  },
 
-    watch(
-        () => state.autoDecimalDigits,
-        (value) => {
-          state.hideNegligibleDecimalDigitsOnFocusEnabled = !value
-          state.hideNegligibleDecimalDigitsOnFocus = !value
-        }
-    )
+  watch: {
+    startAmount() {
+      this.resetValues();
+    },
+    percentagePerPeriod() {
+      this.resetValues();
+    }
+  },
+  beforeMount() {
+    this.resetValues();
+  },
+  methods: {
+    getReturnPerPeriod() {
+      let value = periodTotal * (this.percentagePerPeriod / 100);
 
-    return toRefs(state)
+      periodTotal += value;
+
+      return value.toFixed(4);
+    },
+    getPeriodTotal() {
+      return periodTotal.toFixed(4);
+    },
+    resetValues() {
+      periodTotal = this.startAmount;
+    }
   }
-})
-
+}
 </script>
-
 
 <style lang="scss">
 .calculator {
@@ -96,8 +101,6 @@ export default defineComponent({
 
   &__start-amount {
     margin-bottom: 10px;
-
-
   }
 
   label {
