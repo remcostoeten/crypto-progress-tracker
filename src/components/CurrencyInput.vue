@@ -1,6 +1,6 @@
 <template>
-  <input 
-    ref="inputRef" 
+  <input
+    ref="inputRef"
     :value="formattedValue"
   >
 </template>
