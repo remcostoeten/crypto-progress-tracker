@@ -11,6 +11,9 @@
         <li>
           <router-link to="/calculator"><span>Calculator</span></router-link>
         </li>
+        <li>
+          <router-link to="/demo"><span>Demo</span></router-link>
+        </li>
         <li class="login action primary smooth-animation">
           <router-link to="/login"><span>Login</span></router-link>
         </li>
