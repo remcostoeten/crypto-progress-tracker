@@ -1,0 +1,21 @@
+.action.primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 23px;
+  background-color: $color-blue;
+  color: $color-white;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: darken($color-blue, 5%);
+  }
+}
+
+//@include lib-button-primary();
+//@include lib-css(text-transform, uppercase);
+
+//.action.secondary {
+//  @include lib-button-secondary();
+//}
+
+
