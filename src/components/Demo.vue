@@ -111,7 +111,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
 import CurrencyInput from './CurrencyInput.vue'
 import Dialog from './Dialog.vue'
@@ -124,7 +124,8 @@ export default defineComponent({
   name: 'Demo',
   components: { Slider, Checkbox, OptionSection, Dialog, CurrencyInput },
   setup() {
-    const state: any = reactive({
+
+    const state = reactive({
       exportDialogVisible: false,
       value: 1234.5,
       localeEnabled: false,
