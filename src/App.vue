@@ -17,6 +17,9 @@
         <li class="login action primary smooth-animation">
           <router-link to="/login"><span>Login</span></router-link>
         </li>
+        <li>
+          <router-link to="/register"><span>Register</span></router-link>
+        </li>
       </ul>
     </div>
     <div class="inner">
