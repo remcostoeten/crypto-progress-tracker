@@ -1,4 +1,3 @@
-
 <template>
   <form @submit.prevent="submit">
     <h1 class="h3 mb-3 fw-normal">Please register</h1>
@@ -13,7 +12,7 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import {reactive} from 'vue';
 import {useRouter} from "vue-router";
 export default {
@@ -24,14 +23,17 @@ export default {
       email: '',
       password: ''
     });
+
     const router = useRouter();
+
     const submit = async () => {
-      await fetch('http://127.0.0.1:8000/api/register', {
+      await fetch('http://localhost:8000/api/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
       });
-      // await router.push('/login'); //foward to login page after register
+
+      await router.push('/login');
     }
     return {
       data,
