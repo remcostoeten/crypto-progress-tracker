@@ -33,6 +33,11 @@
                 }
             }
         }
+        
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+        }
     }
     
     &__logo {

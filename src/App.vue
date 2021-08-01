@@ -14,12 +14,12 @@
         <li>
           <router-link to="/demo"><span>Demo</span></router-link>
         </li>
-        <div class="login-section" v-if="!auth">
-          <li class="login action primary smooth-animation">
-            <router-link to="/login"><span>Login</span></router-link>
-          </li>
+        <div class="login-wrapper" v-if="!auth">
           <li>
             <router-link to="/register"><span>Register</span></router-link>
+          </li>
+          <li class="login action primary smooth-animation">
+            <router-link to="/login"><span>Login</span></router-link>
           </li>
         </div>
       </ul>
