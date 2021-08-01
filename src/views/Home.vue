@@ -1,27 +1,32 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Crypto portfolio tracking sheet"/>
-    {{message}}
+    <HelloclassName msg="Crypto portfolio tracking sheet"/>
+    {{ message }}
   </div>
 </template>
 
 <script>
 import {onMounted, ref} from 'vue';
+import {useStore} from "vuex";
+
 export default {
-  name: 'Home',
+  name: "Home",
   setup() {
-    const message = ref('You are not logged in!')
+    const message = ref('You are not logged in!');
+    const store = useStore();
     onMounted(async () => {
-      const response = await fetch('http://localhost:8000/api/user', {
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'include'
-      });
-
-      const content = await response.json();
-
-      message.value = `Welkom ${content.name}`;
+      try {
+        const response = await fetch('http://localhost:8000/api/user', {
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include'
+        });
+        const content = await response.json();
+        message.value = `Hi ${content.name}`;
+        await store.dispatch('setAuth', true);
+      } catch (e) {
+        await store.dispatch('setAuth', false);
+      }
     });
-
     return {
       message
     }

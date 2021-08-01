@@ -14,11 +14,18 @@
         <li>
           <router-link to="/demo"><span>Demo</span></router-link>
         </li>
-        <li class="login action primary smooth-animation">
-          <router-link to="/login"><span>Login</span></router-link>
-        </li>
+        <div class="login-section" v-if="!auth">
+          <li class="login action primary smooth-animation">
+            <router-link to="/login"><span>Login</span></router-link>
+          </li>
+          <li>
+            <router-link to="/register"><span>Register</span></router-link>
+          </li>
+        </div>
+      </ul>
+      <ul v-if="auth">
         <li>
-          <router-link to="/register"><span>Register</span></router-link>
+          <a href="/login" class="nav-link" @click="logout">Logout</a>
         </li>
       </ul>
     </div>
@@ -32,3 +39,30 @@
   <router-view/>
 </template>
 
+
+<script>
+import {computed} from 'vue';
+import {useStore} from 'vuex';
+
+export default {
+  name: "nav",
+  setup() {
+    const store = useStore();
+
+    const auth = computed(() => store.state.authenticated);
+
+    const logout = async () => {
+      await fetch('http://localhost:8000/api/logout', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include'
+      });
+    }
+
+    return {
+      auth,
+      logout
+    }
+  }
+}
+</script>
