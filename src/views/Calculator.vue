@@ -32,9 +32,11 @@
       <tbody class="wrapper">
       <tr v-for="row in rows">
         <td>{{ row }}</td>
-        <td>{{ getReturnPerPeriod(row) }}</td>
-        <td>{{ getPeriodTotal(row) }}</td>
-        <td></td>
+        <td class="minimal-profit">{{ getReturnPerPeriod(row) }}</td>
+        <td class="expected-total">{{ getPeriodTotal(row) }}</td>
+        <td class="real-total">
+          <RealTotal :currency="currency"></RealTotal>
+        </td>
         <td></td>
         <td></td>
         <td></td>
@@ -46,20 +48,23 @@
 
 <script>
 import CurrencyInput from '@/components/CurrencyInput.vue';
+import RealTotal from '@/components/RealTotal.vue';
 
 let periodTotal = 0;
+let startAmount = 0.0179;
 
 export default {
   components: {
     CurrencyInput,
+    RealTotal
   },
 
   data() {
     return {
       rows: 365,
-      startAmount: 670,
+      startAmount: startAmount,
       percentagePerPeriod: 1,
-      currency: 'EUR',
+      currency: 'BTC',
     }
   },
 
@@ -80,10 +85,10 @@ export default {
 
       periodTotal += value;
 
-      return value.toFixed(4);
+      return value.toFixed(10);
     },
     getPeriodTotal() {
-      return periodTotal.toFixed(4);
+      return periodTotal.toFixed(10);
     },
     resetValues() {
       periodTotal = this.startAmount;

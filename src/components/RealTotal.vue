@@ -1,7 +1,7 @@
 <template>
   <input
-    ref="inputRef"
-    :value="formattedValue"
+      ref="inputRef"
+      :value="formattedValue"
   >
 </template>
 
@@ -9,7 +9,7 @@
 import { watch } from 'vue';
 import useCurrencyInput from 'vue-currency-input';
 
-const currencyInputOptions = {
+const totalInputOptions = {
   display: 'symbol',
   precision: 8,
 }
@@ -30,7 +30,7 @@ export default {
   },
 
   setup (props) {
-    const { formattedValue, inputRef, setOptions, setValue } = useCurrencyInput({...currencyInputOptions, currency: props.currency})
+    const { formattedValue, inputRef, setOptions, setValue } = useCurrencyInput({...totalInputOptions, currency: props.currency})
 
     //updates value when the modelValue prop (supplied through v-model) is updated.
     watch(() => props.modelValue, (value) => {
@@ -39,7 +39,7 @@ export default {
 
     //updates input config when the currency prop is updated.
     watch(() => props.currency, (currency) => {
-      setOptions({...currencyInputOptions, currency})
+      setOptions({...totalInputOptions, currency})
     })
 
     return { inputRef, formattedValue }
